@@ -155,16 +155,50 @@ public class Web_test {
                 WebDriver driver = new ChromeDriver();
 
                 String url = "https://openweathermap.org";
-                String textCookie = "We use cookies which are essential "
+                String expectedTextDescription = "We use cookies which are essential "
                         + "for the site to work. We also use non-essential cookies to help us improve our services. "
                         + "Any data collected is anonymised. You can allow all cookies or manage them individually.";
-                String fTempSymbols = "°F";
+                String buttonText1 = "Allow all";
+                String buttonText2 = "Manage cookies";
 
                 driver.get(url);
                 Thread.sleep(5000);
 
+
+                //потверждение что куки панель отображается
                 WebElement stickFooterPanel = driver.findElement(
                         By.xpath("//div[@class = 'stick-footer-panel']"));
+
+                Assert.assertTrue(stickFooterPanel.isDisplayed());
+
+                //потверждение текста
+
+                WebElement cookiesDescription = driver.findElement(
+                        By.xpath("//div[@class = 'stick-footer-panel__container']"
+                                + "//p[@class = 'stick-footer-panel__description']"));
+
+                String actualResultTextDescription = cookiesDescription.getText();
+
+                Assert.assertEquals(actualResultTextDescription,expectedTextDescription);
+
+                //потверждение что 2 нкопки
+
+                WebElement buttonAllow = driver.findElement(
+                        By.xpath("//div[@class = 'stick-footer-panel__btn-container']"
+                                + "//button[@class = 'stick-footer-panel__link']"));
+                Assert.assertEquals(buttonAllow.getText(),buttonText1);
+
+                WebElement buttonManege = driver.findElement(
+                        By.xpath("//div[@class = 'stick-footer-panel__btn-container']"
+                                + "/a[@href = '/cookies-settings']"));
+                Assert.assertEquals(buttonManege.getText(),buttonText2);
+
+
+
+                driver.get(url);
+
+
+
 
 
 

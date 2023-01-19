@@ -42,13 +42,13 @@ public class Web_test {
         searchButton.click();
         Thread.sleep(2000);
 
-        WebElement parisFRChoiceDropdownMenu  = driver.findElement(
+        WebElement parisFRChoiceDropdownMenu = driver.findElement(
                 By.xpath("//ul[@class = 'search-dropdown-menu']/li/span[text() = 'Paris, FR ']")
         );
         parisFRChoiceDropdownMenu.click();
         Thread.sleep(5000);
 
-        WebElement h2CityCountryHeader  = driver.findElement(
+        WebElement h2CityCountryHeader = driver.findElement(
                 By.xpath("//div[@id = 'weather-widget']//h2")
         );
 
@@ -57,22 +57,50 @@ public class Web_test {
         Assert.assertEquals(actualResult, expectedResult);
 
 
+        driver.quit();
+    }
+        // кейс 2
+        // 1 Открыть страницу https://openweathermap.org
+        // 2 Нажать на пункт меню Guide
+        // 3 Потвердить что вы перешли на страницу со ссылкой https://openweathermap.org/guide
+        // и что тайтл этой страницы  OpenWeatherMap API guide - OpenWeatherMap
 
 
 
+        @Test
+        public void testGuidUrlAndHeader() throws InterruptedException {
+
+            System.setProperty("webdriver.chrome.driver", "/Applications/chromedriver_mac_arm64/chromedriver");
+
+            WebDriver driver = new ChromeDriver();
+
+            String url = "https://openweathermap.org";
+            String expectedResultTitle = "OpenWeatherMap API guide - OpenWeatherMap";
+            String expectedResultUrl = "https://openweathermap.org/guide";
+
+            driver.get(url);
+
+
+
+        Thread.sleep(5000);
+
+        WebElement guidElementMenu = driver.findElement(
+                By.xpath("//nav[@id = 'nav-website' ]//a[@href = '/guide']"));
+
+        guidElementMenu.click();
+        Thread.sleep(5000);
+
+        String actualResultUrl = driver.getCurrentUrl();
+        String actualResultTitle = driver.getTitle();
+
+        Assert.assertEquals(actualResultTitle,expectedResultTitle);
+        Assert.assertEquals(actualResultUrl, expectedResultUrl);
 
         driver.quit();
 
 
-       /*
-        @Test
-        public void testH2Text_WhenSearchingCityCountry(){
 
-            System.setProperty("webdriver.chrome.driver", "/Applications/chromedriver_mac_arm64");
 
-            WebDriver driver = new ChromeDriver();*/
-
-        //driver.quit();
 
 
     }

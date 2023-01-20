@@ -352,7 +352,7 @@ public class Web_test {
 
                             String actualQuestionLink = driver.getCurrentUrl();
 
-                            Assert.assertEquals(actualQuestionLink,expectedUrlQuestion);
+                            Assert.assertEquals(actualQuestionLink, expectedUrlQuestion);
 
                             WebElement subjectField = driver.findElement(
                                     By.xpath("//select[@id = 'question_form_subject']//option[2]"));
@@ -386,7 +386,46 @@ public class Web_test {
                             WebElement ActualValidationError = driver.findElement(
                                     By.xpath("//span[@class = 'help-block'] "));
 
-                            Assert.assertEquals(ActualValidationError.getText(),expectedValidationMassage);
+                            Assert.assertEquals(ActualValidationError.getText(), expectedValidationMassage);
+
+                            driver.quit();
+                        }
+
+                            //TC_07
+                            //
+                            //Открыть базовую ссылку
+                            //Нажать на единицы измерения Imperial: °F, mph
+                            //Нажать на единицы измерения Metric: °C, m/s
+                            //Подтвердить, что в результате этих действий, единицы измерения температуры изменились с F на С
+
+                            @Test
+                            public void testSwitcher() throws InterruptedException {
+
+                                System.setProperty("webdriver.chrome.driver", "/Applications/chromedriver_mac_arm64/chromedriver");
+
+                                WebDriver driver = new ChromeDriver();
+
+                                String url = "https://openweathermap.org";
+                                String temperatureValue = "°C";
+
+
+                                driver.manage().window().maximize();
+                                driver.get(url);
+                                Thread.sleep(3000);
+
+                                WebElement temperatureValueToF = driver.findElement(
+                                        By.xpath("//div[@class = 'switch-container']/div[3]"));
+                                temperatureValueToF.click();
+                                Thread.sleep(3000);
+
+                                WebElement temperatureValueToC = driver.findElement(
+                                        By.xpath("//div[@class = 'switch-container']/div[2]"));
+                                temperatureValueToC.click();
+                                Thread.sleep(3000);
+
+                                String temperatureC = driver.findElement(
+                                        By.xpath("//span[@class = 'heading']")).getText();
+                                Assert.assertTrue(temperatureC.contains(temperatureValue));
 
 
 

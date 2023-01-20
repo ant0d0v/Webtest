@@ -179,23 +179,83 @@ public class Web_test {
 
                 String actualResultTextDescription = cookiesDescription.getText();
 
-                Assert.assertEquals(actualResultTextDescription,expectedTextDescription);
+                Assert.assertEquals(actualResultTextDescription, expectedTextDescription);
 
                 //потверждение что 2 нкопки
 
                 WebElement buttonAllow = driver.findElement(
                         By.xpath("//div[@class = 'stick-footer-panel__btn-container']"
                                 + "//button[@class = 'stick-footer-panel__link']"));
-                Assert.assertEquals(buttonAllow.getText(),buttonText1);
+                Assert.assertEquals(buttonAllow.getText(), buttonText1);
 
                 WebElement buttonManege = driver.findElement(
                         By.xpath("//div[@class = 'stick-footer-panel__btn-container']"
                                 + "/a[@href = '/cookies-settings']"));
-                Assert.assertEquals(buttonManege.getText(),buttonText2);
+                Assert.assertEquals(buttonManege.getText(), buttonText2);
+
+                driver.quit();
+            }
+
+                // кейс 5
+                // 1. Открыть страницу https://openweathermap.org
+                // 2. Потвердить что в меню есть 3 сылки FAQ, How to start, Ask a question
+
+                @Test
+                public void testSupportDropdown() throws InterruptedException {
+
+                    System.setProperty("webdriver.chrome.driver", "/Applications/chromedriver_mac_arm64/chromedriver");
+
+                    WebDriver driver = new ChromeDriver();
+
+                    String url = "https://openweathermap.org";
+                    String expectedResultFQA = "FAQ";
+                    String expectedResultHowToStart = "How to start";
+                    String expectedResultAskQuestion = "Ask a question";
+
+                    driver.get(url);
+                    Thread.sleep(5000);
+
+                    WebElement supportDropDown = driver.findElement(By.xpath("//div[@id= 'support-dropdown']"));
+                    supportDropDown.click();
+                    Thread.sleep(1000);
+
+                 //   Assert.assertEquals(driver.findElement(By.xpath("//ul[@id = 'support-dropdown-menu']/li")).size
+                 //   );
+
+                    WebElement FqaLinkIsPresent = driver.findElement(
+                            By.xpath("//ul[@class= 'dropdown-menu dropdown-visible']//a[@href = '/faq']"));
+
+                    String actualResultFQA = FqaLinkIsPresent.getText();
+                    Assert.assertEquals(actualResultFQA, expectedResultFQA);
+
+                    WebElement startLinkIsPresent = driver.findElement(
+                            By.xpath("//ul[@class= 'dropdown-menu dropdown-visible']//li[2]/a[@href = '/appid']"));
+                    String actualResultStart = startLinkIsPresent.getText();
+                    Assert.assertEquals(actualResultStart, expectedResultHowToStart);
+
+                    WebElement questionLinkIsPresent = driver.findElement(
+                            By.xpath("//ul[@class= 'dropdown-menu dropdown-visible']"
+                                    + "//li[3]/a[@href = 'https://home.openweathermap.org/questions']"));
+                    String actualResultAskQuestion = questionLinkIsPresent.getText();
+                    Assert.assertEquals(actualResultAskQuestion, expectedResultAskQuestion);
+                    driver.quit();
+
+                    // кейс 6
+                    // 1. Открыть страницу https://openweathermap.org
+                    // 2. Нажать пункт меню Support > Ask a question
+                    // 3. Заполнить поля Email, Subject, Message
+                    // 4. Не подтвердив CAPTCHA, нажать на кнопку Submit
+                    // 5. Подтвердить, что пользователю будет показана ошибка reCAPTCHA verification failed, please try again.
 
 
 
-                driver.get(url);
+
+
+
+
+
+
+
 
 
 

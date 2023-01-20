@@ -1,4 +1,5 @@
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -426,6 +427,83 @@ public class Web_test {
                                 String temperatureC = driver.findElement(
                                         By.xpath("//span[@class = 'heading']")).getText();
                                 Assert.assertTrue(temperatureC.contains(temperatureValue));
+                            }
+
+                               // TC_08
+
+                               // Открыть базовую ссылку
+                               // Нажать на лого компании
+                               // Дождаться, когда произойдет перезагрузка сайта, и подтвердить, что текущая ссылка не изменилась
+                                @Test
+                                public void testLogoCompany() throws InterruptedException {
+
+                                    System.setProperty("webdriver.chrome.driver", "/Applications/chromedriver_mac_arm64/chromedriver");
+
+                                    WebDriver driver = new ChromeDriver();
+
+                                    String url = "https://openweathermap.org";
+
+
+                                    driver.manage().window().maximize();
+                                    driver.get(url);
+                                    Thread.sleep(3000);
+
+                                    WebElement logoCompany = driver.findElement(
+                                            By.xpath("//img[@src = '/themes/openweathermap/assets/img/logo_white_cropped.png']"));
+                                }
+
+
+                                   // TC_09
+
+                                   // Открыть базовую ссылку
+                                   // В строке поиска в навигационной панели набрать “Rome”
+                                   // Нажать клавишу Enter
+                                   // Подтвердить, что вы перешли на страницу в ссылке которой содержатся слова “find” и “Rome”
+                                   // Подтвердить, что в строке поиска на новой странице вписано слово “Rome”
+
+                                    @Test
+                                    public void testSearchNewResult() throws InterruptedException {
+
+                                        System.setProperty("webdriver.chrome.driver", "/Applications/chromedriver_mac_arm64/chromedriver");
+
+                                        WebDriver driver = new ChromeDriver();
+
+                                        String url = "https://openweathermap.org";
+                                        String expectedResultCity = "Rome";
+                                        String searchValue1 = "find";
+                                        String searchValue2 = "Rome";
+
+                                        driver.manage().window().maximize();
+                                        driver.get(url);
+                                        Thread.sleep(5000);
+
+
+                                        WebElement searchField = driver.findElement(
+                                                By.xpath("//div[@id ='desktop-menu']//input[@type = 'text']"));
+
+                                        searchField.click();
+                                        searchField.sendKeys(expectedResultCity);
+                                        searchField.sendKeys(Keys.ENTER);
+                                        Thread.sleep(3000);
+
+                                        String actualBaseUrl = driver.getCurrentUrl();
+                                        Boolean actualBaseUrlBul;
+
+                                        if (actualBaseUrl.contains(searchValue1) && actualBaseUrl.contains(searchValue2)) {
+                                            actualBaseUrlBul = true;
+                                        }else {
+                                            actualBaseUrlBul = false;
+                                        }
+                                        Boolean expectedResult = actualBaseUrl.contains(searchValue1) && actualBaseUrl.contains(searchValue2);
+                                        Assert.assertEquals(actualBaseUrlBul,expectedResult);
+
+                                        String actualResultSearchBar = driver.findElement(
+                                                By.xpath("//input[@class]")).getAttribute("value");
+
+                                        Assert.assertEquals(actualResultSearchBar,expectedResultCity);
+
+
+                                        driver.quit();
 
 
 
@@ -469,5 +547,13 @@ public class Web_test {
 
 
 
-    }
+
+
+
+
+
+
+
+
+                                }
 }

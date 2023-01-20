@@ -5,6 +5,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
+
 public class Web_test {
 
     // кейс 1
@@ -219,8 +221,8 @@ public class Web_test {
                     supportDropDown.click();
                     Thread.sleep(1000);
 
-                 //   Assert.assertEquals(driver.findElement(By.xpath("//ul[@id = 'support-dropdown-menu']/li")).size
-                 //   );
+                    //   Assert.assertEquals(driver.findElement(By.xpath("//ul[@id = 'support-dropdown-menu']/li")).size
+                    //   );
 
                     WebElement FqaLinkIsPresent = driver.findElement(
                             By.xpath("//ul[@class= 'dropdown-menu dropdown-visible']//a[@href = '/faq']"));
@@ -239,6 +241,7 @@ public class Web_test {
                     String actualResultAskQuestion = questionLinkIsPresent.getText();
                     Assert.assertEquals(actualResultAskQuestion, expectedResultAskQuestion);
                     driver.quit();
+                }
 
                     // кейс 6
                     // 1. Открыть страницу https://openweathermap.org
@@ -246,6 +249,162 @@ public class Web_test {
                     // 3. Заполнить поля Email, Subject, Message
                     // 4. Не подтвердив CAPTCHA, нажать на кнопку Submit
                     // 5. Подтвердить, что пользователю будет показана ошибка reCAPTCHA verification failed, please try again.
+
+                    @Test
+                    public void testValidationMessageCaptcha() throws InterruptedException {
+
+                        System.setProperty("webdriver.chrome.driver", "/Applications/chromedriver_mac_arm64/chromedriver");
+
+                        WebDriver driver = new ChromeDriver();
+
+                        String url = "https://openweathermap.org";
+                        String emailForm = "test@gmail.,com";
+                        String subjectForm = "I want to discuss a purchase of OpenWeather products/subscriptions";
+                        String messageForm = "Hello world ";
+                        String expectedValidationMassageCaptcha = "reCAPTCHA verification failed, please try again.";
+                        String expectedUrlQuestion = "https://home.openweathermap.org/questions";
+
+                        driver.manage().window().maximize();
+                        driver.get(url);
+                        Thread.sleep(5000);
+
+                        WebElement supportDropDown = driver.findElement(By.xpath("//div[@id= 'support-dropdown']"));
+                        supportDropDown.click();
+                        Thread.sleep(1000);
+
+                        WebElement questionLinkIsPresent = driver.findElement(
+                                By.xpath("//ul[@class= 'dropdown-menu dropdown-visible']"
+                                        + "//li[3]/a[@href = 'https://home.openweathermap.org/questions']"));
+                        questionLinkIsPresent.click();
+                        Thread.sleep(3000);
+                        //переключение на вторую вкладу
+                        ArrayList<String> tabs2 = new ArrayList<String>(driver.getWindowHandles());
+                        driver.switchTo().window(tabs2.get(1));
+                        //подтверждаю что я нахожусь именно на ней
+                        String actualUrlQuestion = driver.getCurrentUrl();
+                        Assert.assertEquals(actualUrlQuestion, expectedUrlQuestion);
+
+                        //выбрать имеил поле и написать
+                        WebElement emailField = driver.findElement(
+                                By.xpath("//input[@class = 'form-control string email required']"));
+                        emailField.click();
+                        emailField.sendKeys(emailForm);
+                        //перейти на поле subject кликнуть и выбрать первый вариант
+                        WebElement selectFirst = driver.findElement(
+                                By.xpath("//select[@class = 'form-control select required']/option[2]"));
+                        Assert.assertEquals(selectFirst.getText(), subjectForm);
+
+                        selectFirst.click();
+
+                        WebElement messageField = driver.findElement(
+                                By.xpath("//textarea[@class = 'form-control text required']"));
+
+                        messageField.click();
+                        messageField.sendKeys(messageForm);
+
+                        WebElement buttonSubmit = driver.findElement(
+                                By.xpath("//input[@data-disable-with='Create Question form']"));
+                        buttonSubmit.click();
+                        Thread.sleep(3000);
+
+                        WebElement actualCaptchaText = driver.findElement(
+                                By.xpath("//div[@class = 'has-error']/div[@class = 'help-block']"));
+                        Assert.assertEquals(actualCaptchaText.getText(), expectedValidationMassageCaptcha);
+                    }
+                        // кейс 6
+                        // 1. Открыть страницу https://openweathermap.org
+                        // 2. Нажать пункт меню Support > Ask a question
+                        // 3. Оставить поле Email пустым
+                        // 4. Заполнить поля Subject, Message
+                        // 5. Подтвердив CAPTCHA
+                        // 6. Нажать на кнопку Submit
+                        // 5. Подтвердить, что в поле Email пользователю будет показана ошибка "can't be blank"
+
+                        @Test
+                        public void testValidationMessageEmail() throws InterruptedException {
+
+                            System.setProperty("webdriver.chrome.driver", "/Applications/chromedriver_mac_arm64/chromedriver");
+
+                            WebDriver driver = new ChromeDriver();
+
+                            String url = "https://openweathermap.org";
+                            String messageForm = "Hello world ";
+                            String expectedValidationMassage = "can't be blank";
+                            String expectedUrlQuestion = "https://home.openweathermap.org/questions";
+
+                            driver.manage().window().maximize();
+                            driver.get(url);
+                            Thread.sleep(5000);
+
+                            WebElement supportMenu = driver.findElement(
+                                    By.xpath("//div[@id='support-dropdown']"));
+
+                            supportMenu.click();
+
+                            WebElement questionLink = driver.findElement(
+                                    By.xpath("//ul[@class ='dropdown-menu dropdown-visible']/li[3]/a"));
+
+                            questionLink.click();
+                            Thread.sleep(3000);
+
+                            ArrayList<String> tabs2 = new ArrayList<String>(driver.getWindowHandles());
+                            driver.switchTo().window(tabs2.get(1));
+
+                            String actualQuestionLink = driver.getCurrentUrl();
+
+                            Assert.assertEquals(actualQuestionLink,expectedUrlQuestion);
+
+                            WebElement subjectField = driver.findElement(
+                                    By.xpath("//select[@id = 'question_form_subject']//option[2]"));
+                            subjectField.click();
+
+                            WebElement messageField = driver.findElement(
+                                    By.xpath("//textarea[@class= 'form-control text required']"));
+
+                            messageField.click();
+                            messageField.sendKeys(messageForm);
+
+                            Thread.sleep(3000);
+
+                            String window2 = driver.getWindowHandle();
+                            driver.switchTo().frame(driver.findElement(
+                                    By.cssSelector("iframe[title='reCAPTCHA']")));
+
+                            WebElement captcha = driver.findElement(
+                                    By.xpath("//div[@class= 'recaptcha-checkbox-border']"));
+
+                            captcha.click();
+                            Thread.sleep(3000);
+
+                            driver.switchTo().window(window2);
+
+                            WebElement submitButton = driver.findElement(By.xpath("//input[@value = 'Submit']"));
+
+                            submitButton.click();
+                            Thread.sleep(3000);
+
+                            WebElement ActualValidationError = driver.findElement(
+                                    By.xpath("//span[@class = 'help-block'] "));
+
+                            Assert.assertEquals(ActualValidationError.getText(),expectedValidationMassage);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

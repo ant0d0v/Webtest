@@ -4,7 +4,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
+import java.util.concurrent.TimeUnit;
+import java.util.List;
 import org.testng.annotations.Test;
+
 
 import java.util.ArrayList;
 
@@ -491,19 +494,56 @@ public class Web_test {
 
                                         if (actualBaseUrl.contains(searchValue1) && actualBaseUrl.contains(searchValue2)) {
                                             actualBaseUrlBul = true;
-                                        }else {
+                                        } else {
                                             actualBaseUrlBul = false;
                                         }
                                         Boolean expectedResult = actualBaseUrl.contains(searchValue1) && actualBaseUrl.contains(searchValue2);
-                                        Assert.assertEquals(actualBaseUrlBul,expectedResult);
+                                        Assert.assertEquals(actualBaseUrlBul, expectedResult);
 
                                         String actualResultSearchBar = driver.findElement(
                                                 By.xpath("//input[@class]")).getAttribute("value");
 
-                                        Assert.assertEquals(actualResultSearchBar,expectedResultCity);
+                                        Assert.assertEquals(actualResultSearchBar, expectedResultCity);
 
 
                                         driver.quit();
+                                    }
+                                        //TC_10
+                                        //
+                                        //Открыть базовую ссылку
+                                        //Нажать на пункт меню API
+                                        //Подтвердить, что на открывшейся странице пользователь видит 30 оранжевых кнопок
+                                        @Test
+                                        public void test30OrangeButton() throws InterruptedException {
+
+                                            System.setProperty("webdriver.chrome.driver", "/Applications/chromedriver_mac_arm64/chromedriver");
+
+                                            WebDriver driver = new ChromeDriver();
+
+                                            String url = "https://openweathermap.org";
+                                            int expectedResult = 30;
+
+                                            driver.manage().window().maximize();
+
+                                            driver.get(url);
+
+                                            WebElement apiMenu = driver.findElement(
+                                                    By.xpath("//div[@id = 'desktop-menu']//a[@href = '/api']"));
+
+                                            apiMenu.click();
+
+                                     //       WebElement actualResultOrangeButton = driver.findElement(
+                                     //               By.xpath("//a[contains(@class,'orange')]")
+                                     //       ).size();
+
+                                     //       Assert.assertEquals(actualResultOrangeButton,expectedResult);
+
+
+
+
+                                            driver.quit();
+
+
 
 
 
